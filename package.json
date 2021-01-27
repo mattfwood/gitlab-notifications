@@ -1,0 +1,17 @@
+{
+  "name": "gitlab-notifications",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Matt Wood",
+  "license": "MIT",
+  "scripts": {
+    "start": "vercel dev",
+    "deploy": "vercel deploy --prod"
+  },
+  "devDependencies": {
+    "vercel": "^21.2.0"
+  },
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
