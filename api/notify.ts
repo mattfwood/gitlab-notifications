@@ -2,10 +2,37 @@ import { NowRequest, NowResponse } from "@vercel/node";
 import axios from 'axios';
 
 const USERNAME = 'mwood';
-const SLACK_WEBHOOK_ENDPOINT = 'https://hooks.slack.com/services/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'
+const SLACK_WEBHOOK_ENDPOINT = 'https://hooks.slack.com/services/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'
+
+// async function sendSlackMessage(url: string) {
+//   return await axios.post(SLACK_WEBHOOK_ENDPOINT, {
+//     text: `New Merge Request Assigned:\n${url}`
+//   })
+// }
 
 export default async (req: NowRequest, res: NowResponse) => {
-  // console.log(req.body)
+  console.log(req.body);
+
+  const newMergeRequest = req.body?.changes?.title?.previous === null;
+
+  console.log({ newMergeRequest })
+
+  if (newMergeRequest) {
+    const mergeRequestIncludesUser = req.body.assignees.some((assignee: any) => assignee.username === USERNAME);
+    console.log({ mergeRequestIncludesUser })
+    if (mergeRequestIncludesUser) {
+      // merge request URL isn't included when one is created, so we have to build it ourselves
+      const id = req.body?.changes?.iid?.current;
+      const url = `${req.body?.repository?.homepage}/-/merge_requests/${id}`;
+      console.log({ id, url })
+
+      await axios.post(SLACK_WEBHOOK_ENDPOINT, {
+        text: `New Merge Request Assigned:\n${url}`
+      })
+      return res.send('Slack Notification Sent');
+    }
+  }
+
   const previousAssignees = req.body?.changes?.assignees?.previous;
   const updatedAssignees = req.body?.changes?.assignees?.current;
 
