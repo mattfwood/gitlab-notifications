@@ -2,13 +2,14 @@ import { NowRequest, NowResponse } from "@vercel/node";
 import axios from 'axios';
 
 const USERNAME = 'mwood';
-const SLACK_WEBHOOK_ENDPOINT = 'https://hooks.slack.com/services/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'
+const SLACK_WEBHOOK_ENDPOINT = process.env.SLACK_WEBHOOK_URL || '';
 
 // async function sendSlackMessage(url: string) {
 //   return await axios.post(SLACK_WEBHOOK_ENDPOINT, {
 //     text: `New Merge Request Assigned:\n${url}`
 //   })
 // }
+
 
 export default async (req: NowRequest, res: NowResponse) => {
   console.log(req.body);
